@@ -1,3 +1,5 @@
+package servlet.session;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -23,11 +25,6 @@ public class HelloServlet extends HttpServlet {
         // Actual logic goes here.
         PrintWriter out = response.getWriter();
         out.println("<h1>Hello Servlet</h1>");
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        super.doPost(request, response);
     }
 
     @Override
