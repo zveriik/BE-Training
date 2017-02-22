@@ -36,4 +36,7 @@
     <servlet-name>helloServlet</servlet-name>
   </filter-mapping>
 
+  <listener>
+    <listener-class>servlet.listeners.RequestListener</listener-class>
+  </listener>
 </web-app>
