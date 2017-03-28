@@ -7,36 +7,50 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
          id="WebApp_ID" version="3.0">
 
-  <servlet>
-    <servlet-name>helloServlet</servlet-name>
-    <servlet-class>servlet.session.HelloServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>helloServlet</servlet-name>
-    <url-pattern>/</url-pattern>
-  </servlet-mapping>
-  
-  <filter>
-    <filter-name>loggingFilter</filter-name>
-    <filter-class>servlet.filters.LoggingFilter</filter-class>
-  </filter>
-  <filter-mapping>
-    <filter-name>loggingFilter</filter-name>
-    <url-pattern>/*</url-pattern>
-    <servlet-name>helloServlet</servlet-name>
-    <!--<dispatcher>REQUEST</dispatcher>-->
-  </filter-mapping>
+  <display-name>DogREST</display-name>
+  <!--<context-param>-->
+    <!--<param-name>contextConfigLocation</param-name>-->
+    <!--<param-value>-->
+      <!--/WEB-INF/context.xml-->
+    <!--</param-value>-->
+  <!--</context-param>-->
 
-  <filter>
-    <filter-name>connectionFilter</filter-name>
-    <filter-class>servlet.filters.ConnectionFilter</filter-class>
-  </filter>
-  <filter-mapping>
-    <filter-name>connectionFilter</filter-name>
-    <servlet-name>helloServlet</servlet-name>
-  </filter-mapping>
+  <!--<servlet>-->
+    <!--<servlet-name>dogServlet</servlet-name>-->
+    <!--<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>-->
+    <!--<load-on-startup>1</load-on-startup>-->
+  <!--</servlet>-->
 
-  <listener>
-    <listener-class>servlet.listeners.RequestListener</listener-class>
-  </listener>
+  <!--<servlet-mapping>-->
+    <!--<servlet-name>dogServlet</servlet-name>-->
+    <!--<url-pattern>/service/*</url-pattern>-->
+  <!--</servlet-mapping>-->
+  <!---->
+  <!--<filter>-->
+    <!--<filter-name>loggingFilter</filter-name>-->
+    <!--<filter-class>spring.model.filters.LoggingFilter</filter-class>-->
+  <!--</filter>-->
+  <!--<filter-mapping>-->
+    <!--<filter-name>loggingFilter</filter-name>-->
+    <!--<url-pattern>/*</url-pattern>-->
+    <!--<servlet-name>dogServlet</servlet-name>-->
+    <!--&lt;!&ndash;<dispatcher>REQUEST</dispatcher>&ndash;&gt;-->
+  <!--</filter-mapping>-->
+
+  <!--<filter>-->
+    <!--<filter-name>connectionFilter</filter-name>-->
+    <!--<filter-class>spring.model.filters.ConnectionFilter</filter-class>-->
+  <!--</filter>-->
+  <!--<filter-mapping>-->
+    <!--<filter-name>connectionFilter</filter-name>-->
+    <!--<servlet-name>dogServlet</servlet-name>-->
+    <!--<url-pattern>/*</url-pattern>-->
+  <!--</filter-mapping>-->
+
+  <!--<listener>-->
+    <!--<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>-->
+  <!--</listener>-->
+  <!--<listener>-->
+    <!--<listener-class>spring.model.listeners.RequestListener</listener-class>-->
+  <!--</listener>-->
 </web-app>

@@ -1,4 +1,4 @@
-package servlet.listeners;
+package spring.model.listeners;
 
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.ServletRequestListener;
