@@ -1,7 +1,7 @@
-package spring.dao;
+package com.dao;
 
+import com.model.Dog;
 import org.springframework.stereotype.Repository;
-import spring.model.Dog;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,6 +12,8 @@ import java.util.List;
  */
 @Repository
 public class DogDAO implements Serializable {
+
+    Dog dog;
 
     private static List<Dog> dogs;
     {

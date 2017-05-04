@@ -1,4 +1,6 @@
-package spring.model;
+package com.model;
+
+import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -8,6 +10,7 @@ import java.io.Serializable;
 /**
  * Created by Aleksey_Zverkov on 28.03.2017.
  */
+@Component
 public class Dog implements Serializable {
 
     private Long id;
