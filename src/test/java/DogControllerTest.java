@@ -1,38 +1,43 @@
-import com.controller.DogController;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import com.jayway.restassured.http.ContentType;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static com.jayway.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("/dog-test-servlet.xml")
+
 public class DogControllerTest {
 
-    private MockMvc mockMvc;
-    @Autowired
-    private DogController dogController;
-
-    @Before
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-        this.mockMvc = MockMvcBuilders
-                .standaloneSetup(dogController).build();
+    @DataProvider(name="dogNames")
+    public Object[][] createTestDataRecords() {
+        return new Object[][] {
+                {1L, "one"},
+                {2L, "two"},
+                {3L, "three"}
+        };
     }
 
     @Test
-    public void testGetDog() throws Exception {
-        this.mockMvc.perform(get("/dog"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE));
+    public void testGetDogStatus() {
+        given().
+                when().get("http://localhost:8080/dog").
+                then().assertThat()
+                .statusCode(200).and()
+                .contentType(ContentType.JSON);
+    }
+
+    @Test
+    public void testGetDogErrorStatus() {
+        given().
+                when().get("http://localhost:8080/dog/5").
+                then().assertThat()
+                .statusCode(400);
+    }
+
+    @Test(dataProvider="dogNames")
+    public void testGetDogByIdStatus(Long id, String name) {
+        given().pathParam("id", id).
+                when().get("http://localhost:8080/dog/{id}").
+                then().assertThat().body("name", equalTo(name));
     }
 }

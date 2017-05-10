@@ -1,44 +1,60 @@
 package com.controller;
 
-import com.dao.DogDAO;
 import com.model.Dog;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/dog")
 public class DogController {
 
-    @Autowired
-    private DogDAO dogDAO;
+    private static final HashMap<Long, Dog> dogs = new HashMap<>();
+    static {
+        dogs.put(1L, new Dog(1L, "one", true, 4));
+        dogs.put(2L, new Dog(2L, "two", false, 4));
+        dogs.put(3L, new Dog(3L, "three", true, 4));
+    }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ResponseBody
-    public List getDogs() {
-        return dogDAO.list();
+    public HashMap<Long, Dog> getDogs() {
+        return dogs;
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public synchronized ResponseEntity getDogById (@PathVariable("id") Long id) {
+        Dog dog = dogs.get(id);
+        if (dog != null)
+            return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(dog);
+        return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body("No Dog found for ID " + id);
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.POST)
     @ResponseBody
-    public Dog getDogById (@PathVariable("id") Long id) {
-        Dog dog = dogDAO.get(id);
-//        if (dog == null){
-//            return "No Dog found for ID " + id;
-//        }
+    public synchronized Dog updateDog(@PathVariable Long id) {
+        Dog dog = new Dog();
+        dog.setId(id);
+        dogs.put(id, dog);
         return dog;
     }
 
-    @RequestMapping(value = "/create/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ResponseBody
-    public Dog updateCustomer(@PathVariable Long id) {
-//        Dog dog = dogDAO.get(id);
-//        if (dog == null) {
-            Dog dog = new Dog();
-            dog.setId(id);
-            dogDAO.create(dog);
-//        }
-        return dog;
+    public synchronized ResponseEntity removeDog(@PathVariable Long id) {
+        Dog dog = dogs.remove(id);
+        if (dog != null)
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(dog);
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body("No Dog found for ID " + id);
     }
 }
