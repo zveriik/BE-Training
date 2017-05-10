@@ -38,9 +38,7 @@ public class DogController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.POST)
     @ResponseBody
-    public synchronized Dog updateDog(@PathVariable Long id) {
-        Dog dog = new Dog();
-        dog.setId(id);
+    public synchronized Dog updateDog(@PathVariable Long id, @RequestBody Dog dog) {
         dogs.put(id, dog);
         return dog;
     }

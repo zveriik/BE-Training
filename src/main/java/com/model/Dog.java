@@ -18,7 +18,7 @@ public class Dog implements Serializable {
     @NotNull
     private boolean sex;
 
-    @Min(0)
+    @Min(value = 0, message = "Age must be positive")
     private int age;
 
     public Dog() {

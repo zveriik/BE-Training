@@ -40,4 +40,22 @@ public class DogControllerTest {
                 when().get("http://localhost:8080/dog/{id}").
                 then().assertThat().body("name", equalTo(name));
     }
+
+    @Test
+    public void testDogPost() {
+        String dogJson = "{\"id\":4,\"name\":\"four\",\"sex\":true,\"age\":14}";
+        given().
+            contentType(ContentType.JSON).
+            body(dogJson).when().
+            post("http://localhost:8080/dog/4").andReturn().body();
+    }
+
+//    @Test
+//    public void testDogPostValidation() {
+//        String dogJson = "{\"id\":5,\"name\":\"four\",\"sex\":true,\"age\":-14}";
+//        given().
+//            contentType(ContentType.JSON).
+//            body(dogJson).when().
+//            post("http://localhost:8080/dog/5").andReturn().body();
+//    }
 }
