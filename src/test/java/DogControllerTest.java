@@ -1,26 +1,24 @@
+import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
-import org.testng.annotations.DataProvider;
+import com.model.Dog;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import static com.jayway.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
+import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
 
 
 public class DogControllerTest {
 
-    @DataProvider(name="dogNames")
-    public Object[][] createTestDataRecords() {
-        return new Object[][] {
-                {1L, "one"},
-                {2L, "two"},
-                {3L, "three"}
-        };
+    @BeforeClass
+    public static void setUp(){
+        RestAssured.baseURI = "http://localhost:8080/";
     }
 
     @Test
     public void testGetDogStatus() {
         given().
-                when().get("http://localhost:8080/dog").
+                when().get("/dog").
                 then().assertThat()
                 .statusCode(200).and()
                 .contentType(ContentType.JSON);
@@ -29,33 +27,52 @@ public class DogControllerTest {
     @Test
     public void testGetDogErrorStatus() {
         given().
-                when().get("http://localhost:8080/dog/5").
+                when().get("/dog/5").
                 then().assertThat()
                 .statusCode(400);
     }
 
-    @Test(dataProvider="dogNames")
-    public void testGetDogByIdStatus(Long id, String name) {
-        given().pathParam("id", id).
-                when().get("http://localhost:8080/dog/{id}").
-                then().assertThat().body("name", equalTo(name));
+    @Test
+    public void testDogCreation() {
+        Dog original = new Dog("test", true, 14);
+        Dog created = postDog(original);
+        original.setId(created.getId());
+        Dog fromDb = getDogById(original.getId());
+        assertReflectionEquals(original, fromDb);
     }
 
     @Test
-    public void testDogPost() {
-        String dogJson = "{\"id\":4,\"name\":\"four\",\"sex\":true,\"age\":14}";
-        given().
-            contentType(ContentType.JSON).
-            body(dogJson).when().
-            post("http://localhost:8080/dog/4").andReturn().body();
+    public void testDogPut(){
+        Dog original = new Dog("put_dog", true, 14);
+        original.setId(1);
+        putDog(1, original);
+        Dog fromDb = getDogById(original.getId());
+        assertReflectionEquals(original, fromDb);
     }
 
-//    @Test
-//    public void testDogPostValidation() {
-//        String dogJson = "{\"id\":5,\"name\":\"four\",\"sex\":true,\"age\":-14}";
-//        given().
-//            contentType(ContentType.JSON).
-//            body(dogJson).when().
-//            post("http://localhost:8080/dog/5").andReturn().body();
-//    }
+    @Test
+    public void testDogDelete() {
+        Dog original = new Dog("put_dog", true, 14);
+        original.setId(1);
+        postDog(original);
+        given()
+            .pathParam("id", 1).
+        when()
+            .delete("http://localhost:8080/dog/{id}").
+        then().assertThat().statusCode(200);
+    }
+
+    private Dog getDogById(int id) {
+        return given().pathParam("id", id).get("/dog/{id}").as(Dog.class);
+    }
+
+    private Dog postDog(Dog original) {
+        return given().body(original).contentType(ContentType.JSON).
+                when().post("/dog/new").as(Dog.class);
+    }
+
+    private Dog putDog(int id, Dog dog){
+        return given().pathParam("id", id).body(dog).contentType(ContentType.JSON).
+                when().put("/dog/{id}").as(Dog.class);
+    }
 }

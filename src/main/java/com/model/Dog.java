@@ -4,13 +4,16 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by Aleksey_Zverkov on 28.03.2017.
  */
 public class Dog implements Serializable {
 
-    private Long id;
+    private static AtomicInteger current_id = new AtomicInteger(0);
+
+    private int id;
 
     @Size(min=3, max=30)
     private String name;
@@ -24,18 +27,18 @@ public class Dog implements Serializable {
     public Dog() {
     }
 
-    public Dog(Long id, String name, boolean sex, int age) {
-        this.id = id;
+    public Dog(String name, boolean sex, int age) {
+        this.id = current_id.incrementAndGet();
         this.name = name;
         this.sex = sex;
         this.age = age;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id){
+    public void setId(int id){
         this.id = id;
     }
 
