@@ -11,7 +11,7 @@ import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEqua
 public class DogControllerTest {
 
     @BeforeClass
-    public static void setUp(){
+    public static void setUp() {
         RestAssured.baseURI = "http://localhost:8080/";
     }
 
@@ -27,14 +27,14 @@ public class DogControllerTest {
     @Test
     public void testGetDogErrorStatus() {
         given().
-                when().get("/dog/5").
+                when().get("/dog/" + Integer.MAX_VALUE).
                 then().assertThat()
                 .statusCode(400);
     }
 
     @Test
     public void testDogCreation() {
-        Dog original = new Dog("test", true, 14);
+        Dog original = new Dog("creation_test", true, 14);
         Dog created = postDog(original);
         original.setId(created.getId());
         Dog fromDb = getDogById(original.getId());
@@ -42,24 +42,24 @@ public class DogControllerTest {
     }
 
     @Test
-    public void testDogPut(){
-        Dog original = new Dog("put_dog", true, 14);
-        original.setId(1);
-        putDog(1, original);
+    public void testDogPut() {
+        Dog original = new Dog("put_test", true, 14);
+        original.setId(2);
+        putDog(2, original);
         Dog fromDb = getDogById(original.getId());
         assertReflectionEquals(original, fromDb);
     }
 
     @Test
     public void testDogDelete() {
-        Dog original = new Dog("put_dog", true, 14);
-        original.setId(1);
-        postDog(original);
-        given()
-            .pathParam("id", 1).
-        when()
-            .delete("http://localhost:8080/dog/{id}").
-        then().assertThat().statusCode(200);
+        Dog original = new Dog("deleted_test", true, 14);
+        Dog postedDog = postDog(original);
+        given().pathParam("id", postedDog.getId()).
+                when().delete("/dog/{id}").
+                then().assertThat().statusCode(200);
+
+        given().pathParam("id", postedDog.getId()).get("/dog/{id}").
+                then().assertThat().statusCode(400);
     }
 
     private Dog getDogById(int id) {
@@ -68,10 +68,10 @@ public class DogControllerTest {
 
     private Dog postDog(Dog original) {
         return given().body(original).contentType(ContentType.JSON).
-                when().post("/dog/new").as(Dog.class);
+                when().post("/dog/").as(Dog.class);
     }
 
-    private Dog putDog(int id, Dog dog){
+    private Dog putDog(int id, Dog dog) {
         return given().pathParam("id", id).body(dog).contentType(ContentType.JSON).
                 when().put("/dog/{id}").as(Dog.class);
     }
