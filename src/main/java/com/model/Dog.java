@@ -31,6 +31,13 @@ public class Dog implements Serializable {
         this.age = age;
     }
 
+    public Dog(int id, String name, boolean sex, int age) {
+        this.id = id;
+        this.name = name;
+        this.sex = sex;
+        this.age = age;
+    }
+
     public int getId() {
         return id;
     }
