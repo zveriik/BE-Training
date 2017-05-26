@@ -76,8 +76,8 @@ public class DogControllerMockTest {
     @Test
     public void test_get_by_id_fail_404_not_found() throws Exception {
         when(dogService.getById(1)).thenReturn(null);
-        mockMvc.perform(get("/users/{id}", 1))
-                .andExpect(status().isNotFound());
+        mockMvc.perform(get("/dog/{id}", 1))
+                .andExpect(status().isBadRequest());
         verify(dogService, times(1)).getById(1);
         verifyNoMoreInteractions(dogService);
     }
