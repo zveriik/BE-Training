@@ -3,6 +3,8 @@ package com.service;
 import com.model.Dog;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -14,8 +16,8 @@ public class DogServiceImpl implements DogService {
     private static final ConcurrentHashMap<Integer, Dog> dogs = new ConcurrentHashMap<>();
 
     @Override
-    public ConcurrentHashMap<Integer, Dog> getAll() {
-        return dogs;
+    public List<Dog> getAll() {
+        return new ArrayList<>(dogs.values());
     }
 
     @Override
@@ -36,17 +38,12 @@ public class DogServiceImpl implements DogService {
     public Dog update(int id, Dog dog) {
         dog.setId(id);
         dogs.put(id, dog);
-        return dog;
+        return dogs.get(id);
     }
 
     @Override
     public Dog delete(int id) {
         Dog dog = dogs.remove(id);
         return dog;
-    }
-
-    @Override
-    public boolean exists(Dog dog) {
-        return false;
     }
 }

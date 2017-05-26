@@ -2,11 +2,11 @@ package com.service;
 
 import com.model.Dog;
 
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.List;
 
 public interface DogService {
 
-    ConcurrentHashMap<Integer, Dog> getAll();
+    List<Dog> getAll();
 
     Dog getById(int id);
 
@@ -15,6 +15,4 @@ public interface DogService {
     Dog update(int id, Dog dog);
 
     Dog delete(int id);
-
-    boolean exists(Dog dog);
 }

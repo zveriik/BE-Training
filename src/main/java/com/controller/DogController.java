@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.List;
 
 @RestController
 @RequestMapping("/")
@@ -19,7 +19,7 @@ public class DogController {
     @RequestMapping(value = "/dog", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity getAllDogs() {
-        ConcurrentHashMap<Integer, Dog> dogs = dogService.getAll();
+        List<Dog> dogs = dogService.getAll();
         if (!dogs.isEmpty()){
             return ResponseEntity
                     .status(HttpStatus.OK)

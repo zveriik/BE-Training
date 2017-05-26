@@ -71,6 +71,31 @@ public class Dog implements Serializable {
     }
 
     @Override
+    public int hashCode() {
+        int result = 17;
+        result = 31 * result + id;
+        result = 31 * result + name.hashCode();
+        result = 31 * result + (sex ? 1 : 0);
+        result = 31 * result + age;
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (!(obj instanceof Dog)) {
+            return false;
+        }
+
+        Dog dog = (Dog) obj;
+
+        return dog.id == id &&
+                dog.name.equals(name) &&
+                dog.sex == sex &&
+                dog.age == age;
+    }
+
+    @Override
     public String toString() {
         return super.toString();
     }
