@@ -1,3 +1,5 @@
+package controller;
+
 import com.controller.DogController;
 import com.google.gson.Gson;
 import com.model.Dog;
@@ -42,7 +44,6 @@ public class DogControllerMockTest {
         MockitoAnnotations.initMocks(this);
         this.mockMvc = MockMvcBuilders
                 .standaloneSetup(dogController).build();
-
     }
 
     @Test
@@ -62,7 +63,7 @@ public class DogControllerMockTest {
 
     @Test
     public void test_get_by_id_success() throws Exception {
-        Dog dog = new Dog(1,"test_get_1", true, 14);
+        Dog dog = new Dog(1,"test_get_1", "male", 14);
         when(dogService.getById(1)).thenReturn(dog);
         this.mockMvc.perform(get("/dog/{id}", 1))
                 .andExpect(status().isOk())
@@ -77,14 +78,14 @@ public class DogControllerMockTest {
     public void test_get_by_id_fail_404_not_found() throws Exception {
         when(dogService.getById(1)).thenReturn(null);
         mockMvc.perform(get("/dog/{id}", 1))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isNotFound());
         verify(dogService, times(1)).getById(1);
         verifyNoMoreInteractions(dogService);
     }
 
     @Test
     public void test_create_dog_success() throws Exception {
-        Dog dog = new Dog(1,"test_create_1", true, 14);
+        Dog dog = new Dog(1,"test_create_1", "male", 14);
         when(dogService.create(any(Dog.class))).thenReturn(dog);
         mockMvc.perform(post("/dog")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -100,7 +101,7 @@ public class DogControllerMockTest {
 
     @Test
     public void test_update_dog_success() throws Exception {
-        Dog dog = new Dog(1,"test_updated_1", true, 14);
+        Dog dog = new Dog(1,"test_updated_1", "male", 14);
         when(dogService.update(1, dog)).thenReturn(dog);
         mockMvc.perform(put("/dog/{id}", 1)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -112,7 +113,7 @@ public class DogControllerMockTest {
 
     @Test
     public void test_delete_dog_success() throws Exception {
-        Dog dog = new Dog(1,"test_delete_1", true, 14);
+        Dog dog = new Dog(1,"test_delete_1", "male", 14);
         when(dogService.delete(dog.getId())).thenReturn(dog);
         mockMvc.perform(
                 delete("/dog/{id}", dog.getId()))
@@ -123,9 +124,9 @@ public class DogControllerMockTest {
     
     private List<Dog> createTestData(){
         List<Dog> dogs = new ArrayList<>();
-        dogs.add(new Dog(1, "test_1", true, 2));
-        dogs.add(new Dog(2, "test_2", true, 2));
-        dogs.add(new Dog(3, "test_3", true, 2));
+        dogs.add(new Dog(1, "test_1", "male", 2));
+        dogs.add(new Dog(2, "test_2", "male", 2));
+        dogs.add(new Dog(3, "test_3", "male", 2));
         return dogs;
     }
 }

@@ -1,5 +1,6 @@
 package com.model;
 
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -10,14 +11,14 @@ import java.io.Serializable;
  */
 public class Dog implements Serializable {
 
-    @NotNull
+    @Max(value = Integer.MAX_VALUE)
     private int id;
 
     @Size(min=3, max=30)
     private String name;
 
     @NotNull
-    private boolean sex;
+    private String gender;
 
     @Min(value = 0, message = "Age must be positive")
     private int age;
@@ -25,16 +26,16 @@ public class Dog implements Serializable {
     public Dog() {
     }
 
-    public Dog(String name, boolean sex, int age) {
+    public Dog(String name, String gender, int age) {
         this.name = name;
-        this.sex = sex;
+        this.gender = gender;
         this.age = age;
     }
 
-    public Dog(int id, String name, boolean sex, int age) {
+    public Dog(int id, String name, String gender, int age) {
         this.id = id;
         this.name = name;
-        this.sex = sex;
+        this.gender = gender;
         this.age = age;
     }
 
@@ -54,12 +55,12 @@ public class Dog implements Serializable {
         this.name = name;
     }
 
-    public boolean isSex() {
-        return sex;
+    public String getGender() {
+        return gender;
     }
 
-    public void setSex(boolean sex) {
-        this.sex = sex;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public int getAge() {
@@ -75,7 +76,7 @@ public class Dog implements Serializable {
         int result = 17;
         result = 31 * result + id;
         result = 31 * result + name.hashCode();
-        result = 31 * result + (sex ? 1 : 0);
+        result = 31 * result + gender.hashCode();
         result = 31 * result + age;
         return result;
     }
@@ -91,7 +92,7 @@ public class Dog implements Serializable {
 
         return dog.id == id &&
                 dog.name.equals(name) &&
-                dog.sex == sex &&
+                dog.gender.equals(gender) &&
                 dog.age == age;
     }
 

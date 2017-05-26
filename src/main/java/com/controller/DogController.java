@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -31,32 +32,32 @@ public class DogController {
     }
 
     @RequestMapping(value = "/dog/{id}", method = RequestMethod.GET)
-    public ResponseEntity getDogById (@PathVariable("id") int id) {
+    public ResponseEntity getDogById (@PathVariable("id") @Valid int id) {
         Dog dog = dogService.getById(id);
         if (dog != null)
             return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(dog);
         return ResponseEntity
-            .status(HttpStatus.BAD_REQUEST)
+            .status(HttpStatus.NOT_FOUND)
             .body("No Dog found for ID " + id);
     }
 
     @RequestMapping(value = "/dog", method = RequestMethod.POST)
     @ResponseBody
-    public Dog createDog(@RequestBody Dog dog) {
+    public Dog createDog(@RequestBody @Valid Dog dog) {
         return dogService.create(dog);
     }
 
     @RequestMapping(value = "/dog/{id}", method = RequestMethod.PUT)
     @ResponseBody
-    public Dog updateDogById(@PathVariable int id, @RequestBody Dog dog) {
+    public Dog updateDogById(@PathVariable int id, @RequestBody @Valid Dog dog) {
         return dogService.update(id, dog);
     }
 
     @RequestMapping(value = "/dog/{id}", method = RequestMethod.DELETE)
     @ResponseBody
-    public ResponseEntity removeDogById(@PathVariable int id) {
+    public ResponseEntity removeDogById(@PathVariable @Valid int id) {
         Dog dog = dogService.delete(id);
         if (dog != null)
             return ResponseEntity

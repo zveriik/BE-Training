@@ -27,9 +27,7 @@ public class DogServiceImpl implements DogService {
 
     @Override
     public Dog create(Dog dog) {
-        if (!dogs.containsKey(dog.getId())){
-            dog.setId(current_id.getAndIncrement());
-        }
+        dog.setId(current_id.getAndIncrement());
         dogs.put(dog.getId(), dog);
         return dog;
     }
@@ -43,7 +41,6 @@ public class DogServiceImpl implements DogService {
 
     @Override
     public Dog delete(int id) {
-        Dog dog = dogs.remove(id);
-        return dog;
+        return dogs.remove(id);
     }
 }
