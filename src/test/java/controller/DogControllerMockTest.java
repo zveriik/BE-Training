@@ -52,24 +52,20 @@ public class DogControllerMockTest {
         this.mockMvc.perform(get("/dog"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-                .andExpect(jsonPath("$", hasSize(3)))
-                .andExpect(jsonPath("$[0].id", is(1)))
-                .andExpect(jsonPath("$[0].name", is("test_1")))
-                .andExpect(jsonPath("$[1].id", is(2)))
-                .andExpect(jsonPath("$[1].name", is("test_2")));
+                .andExpect(jsonPath("$", hasSize(1)));
         verify(dogService, times(1)).getAll();
         verifyNoMoreInteractions(dogService);
     }
 
     @Test
     public void test_get_by_id_success() throws Exception {
-        Dog dog = new Dog(1,"test_get_1", "male", 14);
+        Dog dog = Dog.random();
         when(dogService.getById(1)).thenReturn(dog);
         this.mockMvc.perform(get("/dog/{id}", 1))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-                .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.name", is("test_get_1")));
+                .andExpect(jsonPath("$.id", is(dog.getId())))
+                .andExpect(jsonPath("$.name", is(dog.getName())));
         verify(dogService, times(1)).getById(1);
         verifyNoMoreInteractions(dogService);
     }
@@ -85,23 +81,23 @@ public class DogControllerMockTest {
 
     @Test
     public void test_create_dog_success() throws Exception {
-        Dog dog = new Dog(1,"test_create_1", "male", 14);
+        Dog dog = Dog.random();
         when(dogService.create(any(Dog.class))).thenReturn(dog);
         mockMvc.perform(post("/dog")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(gson.toJson(dog)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.name", is("test_create_1")))
-                .andExpect(jsonPath("$.age", is(14)));
+                .andExpect(jsonPath("$.id", is(dog.getId())))
+                .andExpect(jsonPath("$.name", is(dog.getName())))
+                .andExpect(jsonPath("$.age", is(dog.getAge())));
         verify(dogService, times(1)).create(dog);
         verifyNoMoreInteractions(dogService);
     }
 
     @Test
     public void test_update_dog_success() throws Exception {
-        Dog dog = new Dog(1,"test_updated_1", "male", 14);
+        Dog dog = Dog.random();
         when(dogService.update(1, dog)).thenReturn(dog);
         mockMvc.perform(put("/dog/{id}", 1)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -113,7 +109,7 @@ public class DogControllerMockTest {
 
     @Test
     public void test_delete_dog_success() throws Exception {
-        Dog dog = new Dog(1,"test_delete_1", "male", 14);
+        Dog dog = Dog.random();
         when(dogService.delete(dog.getId())).thenReturn(dog);
         mockMvc.perform(
                 delete("/dog/{id}", dog.getId()))
@@ -124,9 +120,7 @@ public class DogControllerMockTest {
     
     private List<Dog> createTestData(){
         List<Dog> dogs = new ArrayList<>();
-        dogs.add(new Dog(1, "test_1", "male", 2));
-        dogs.add(new Dog(2, "test_2", "male", 2));
-        dogs.add(new Dog(3, "test_3", "male", 2));
+        dogs.add(Dog.random());
         return dogs;
     }
 }

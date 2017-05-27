@@ -17,7 +17,7 @@ public class DogController {
     @Autowired
     private DogService dogService;
 
-    @RequestMapping(value = "/dog", method = RequestMethod.GET)
+    @GetMapping(value = "/dog")
     @ResponseBody
     public ResponseEntity getAllDogs() {
         List<Dog> dogs = dogService.getAll();
@@ -31,7 +31,7 @@ public class DogController {
                 .body("Dogs not found");
     }
 
-    @RequestMapping(value = "/dog/{id}", method = RequestMethod.GET)
+    @GetMapping(value = "/dog/{id}")
     public ResponseEntity getDogById (@PathVariable("id") @Valid int id) {
         Dog dog = dogService.getById(id);
         if (dog != null)
@@ -43,19 +43,19 @@ public class DogController {
             .body("No Dog found for ID " + id);
     }
 
-    @RequestMapping(value = "/dog", method = RequestMethod.POST)
+    @PostMapping(value = "/dog")
     @ResponseBody
     public Dog createDog(@RequestBody @Valid Dog dog) {
         return dogService.create(dog);
     }
 
-    @RequestMapping(value = "/dog/{id}", method = RequestMethod.PUT)
+    @PutMapping(value = "/dog/{id}")
     @ResponseBody
     public Dog updateDogById(@PathVariable int id, @RequestBody @Valid Dog dog) {
         return dogService.update(id, dog);
     }
 
-    @RequestMapping(value = "/dog/{id}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/dog/{id}")
     @ResponseBody
     public ResponseEntity removeDogById(@PathVariable @Valid int id) {
         Dog dog = dogService.delete(id);

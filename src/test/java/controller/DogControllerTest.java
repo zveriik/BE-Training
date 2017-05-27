@@ -14,12 +14,12 @@ public class DogControllerTest {
 
     @BeforeClass
     public static void setUp() {
-        RestAssured.baseURI = "http://localhost:8081/";
+        RestAssured.baseURI = "http://localhost:8080/";
     }
 
     @Test
     public void testGetDogStatus() {
-        postDog(new Dog ("test_initial", "male", 1));
+        postDog(Dog.random());
         given().
                 when().get("/dog").
                 then().assertThat()
@@ -37,7 +37,7 @@ public class DogControllerTest {
 
     @Test
     public void testDogCreation() {
-        Dog original = new Dog("creation_test", "male", 14);
+        Dog original = Dog.random();
         Dog created = postDog(original);
         original.setId(created.getId());
         Dog fromDb = getDogById(original.getId());
@@ -46,7 +46,7 @@ public class DogControllerTest {
 
     @Test
     public void testDogPut() {
-        Dog original = new Dog("put_test", "male", 14);
+        Dog original = Dog.random();
         original.setId(2);
         original = putDog(2, original);
         Dog fromDb = getDogById(original.getId());
@@ -55,7 +55,7 @@ public class DogControllerTest {
 
     @Test
     public void testDogPutNotValid() {
-        Dog original = new Dog("put_test", null, 14);
+        Dog original = Dog.random();
         original.setId(5);
         original = putDog(5, original);
         Dog fromDb = getDogById(original.getId());
@@ -64,7 +64,7 @@ public class DogControllerTest {
 
     @Test
     public void testDogDelete() {
-        Dog original = new Dog("deleted_test", "male", 14);
+        Dog original = Dog.random();
         Dog postedDog = postDog(original);
         given().pathParam("id", postedDog.getId()).
                 when().delete("/dog/{id}").

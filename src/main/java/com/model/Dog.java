@@ -1,10 +1,16 @@
 package com.model;
 
+import com.utils.Gender;
+
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+
+import static com.utils.Utils.randomBoolean;
+import static com.utils.Utils.randomInteger;
+import static com.utils.Utils.randomString;
 
 /**
  * Created by Aleksey_Zverkov on 28.03.2017.
@@ -17,26 +23,18 @@ public class Dog implements Serializable {
     @Size(min=3, max=30)
     private String name;
 
-    @NotNull
+    @Gender
     private String gender;
 
     @Min(value = 0, message = "Age must be positive")
     private int age;
 
-    public Dog() {
-    }
-
-    public Dog(String name, String gender, int age) {
-        this.name = name;
-        this.gender = gender;
-        this.age = age;
-    }
-
-    public Dog(int id, String name, String gender, int age) {
-        this.id = id;
-        this.name = name;
-        this.gender = gender;
-        this.age = age;
+    public static Dog random() {
+        Dog dog = new Dog();
+        dog.name = randomString(3, 30);
+        dog.gender = randomBoolean() ? "male" : "female";
+        dog.age = randomInteger(0, 20);
+        return dog;
     }
 
     public int getId() {
