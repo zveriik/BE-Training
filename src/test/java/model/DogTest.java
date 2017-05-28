@@ -35,4 +35,18 @@ public class DogTest {
         Set<ConstraintViolation<Dog>> errors = validator.validate(dog);
         assertEquals(errors.size(), 1);
     }
+
+    public void testNotValidGender(){
+        Dog dog = Dog.random();
+        dog.setGender("none");
+        Set<ConstraintViolation<Dog>> errors = validator.validate(dog);
+        assertEquals(errors.size(), 1);
+    }
+
+    public void testNotValidAge(){
+        Dog dog = Dog.random();
+        dog.setAge(-1);
+        Set<ConstraintViolation<Dog>> errors = validator.validate(dog);
+        assertEquals(errors.size(), 1);
+    }
 }

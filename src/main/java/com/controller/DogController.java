@@ -19,16 +19,8 @@ public class DogController {
 
     @GetMapping(value = "/dog")
     @ResponseBody
-    public ResponseEntity getAllDogs() {
-        List<Dog> dogs = dogService.getAll();
-        if (!dogs.isEmpty()){
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(dogs);
-        }
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body("Dogs not found");
+    public List<Dog> getAllDogs() {
+        return dogService.getAll();
     }
 
     @GetMapping(value = "/dog/{id}")
@@ -64,7 +56,7 @@ public class DogController {
                     .status(HttpStatus.OK)
                     .body(dog);
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
+                .status(HttpStatus.NOT_FOUND)
                 .body("No Dog found for ID " + id);
     }
 }
